@@ -29,18 +29,21 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         # 上下左右の移動
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_w]:
             self.rect.y -= self.speed
-        elif keys[pygame.K_DOWN]:
+        elif keys[pygame.K_s]:
             self.rect.y += self.speed
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_a]:
             self.rect.x -= self.speed
-        elif keys[pygame.K_RIGHT]:
+        elif keys[pygame.K_d]:
             self.rect.x += self.speed
 
         # 弾の発射
         if keys[pygame.K_SPACE]:
             self.bullet_group.add(Bullet(self.rect.x + 16, self.rect.y))
+            # 弾の速度をプレイヤーの速度の2倍に設定
+            for bullet in self.bullet_group:
+                bullet.speed = self.speed * 2
 
         # 画面外に出ないように調整
         if self.rect.x < 0:
@@ -51,6 +54,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y = 0
         elif self.rect.y > screen_height - self.rect.height:
             self.rect.y = screen_height - self.rect.height
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
