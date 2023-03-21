@@ -42,9 +42,12 @@ class Player(pygame.sprite.Sprite):
         # 弾の発射
         if keys[pygame.K_LSHIFT]:
             now = pygame.time.get_ticks()
-            if now - self.last_shot_time >= 20:
+            if now - self.last_shot_time >= 100:
                 self.last_shot_time = now
-                self.bullet_group.add(Bullet(self.rect.x + 16, self.rect.y))
+                self.bullet_group.add(Bullet(self.rect.centerx, self.rect.top))
+                # 弾の速度をプレイヤーの4倍に設定
+                for bullet in self.bullet_group:
+                    bullet.speed = -self.speed * 4
 
         # 画面外に出ないように調整
         if self.rect.x < 0:
@@ -55,7 +58,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.y = 0
         elif self.rect.y > screen_height - self.rect.height:
             self.rect.y = screen_height - self.rect.height
-
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -75,9 +77,9 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.image = bullet_image
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.speed = -10
+        self.rect.centerx = x
+        self.rect.bottom = y
+        self.speed = -20
 
     def update(self):
         self.rect.y += self.speed
