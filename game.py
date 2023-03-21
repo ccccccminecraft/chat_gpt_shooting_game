@@ -79,8 +79,10 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = 10
 
     def update(self):
-        # 上方向に移動
         self.rect.y -= self.speed
+        if self.rect.bottom < 0:
+            self.kill()
+
 
 # グループの定義
 all_sprites_group = pygame.sprite.Group()
