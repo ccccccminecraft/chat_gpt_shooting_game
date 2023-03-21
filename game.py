@@ -40,7 +40,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += self.speed
 
         # 弾の発射
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_LSHIFT]:
             now = pygame.time.get_ticks()
             if now - self.last_shot_time >= 20:
                 self.last_shot_time = now
