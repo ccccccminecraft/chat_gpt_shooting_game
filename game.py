@@ -99,6 +99,9 @@ all_sprites_group.add(player)
 player_group.add(player)
 
 # メインループ
+last_countdown_tick = pygame.time.get_ticks()
+n = 20
+spawn_countdown = 0
 while True:
     # イベント処理
     for event in pygame.event.get():
@@ -149,6 +152,8 @@ while True:
         restart_text = font.render("Press SPACE to restart", True, (255, 255, 255))
         restart_rect = restart_text.get_rect(center=(screen_width / 2, screen_height / 2 + 50))
         screen.blit(restart_text, restart_rect)
+        n = 20
+        spawn_countdown = 0
         if pygame.key.get_pressed()[pygame.K_SPACE]:
             game_state = "title"
             all_sprites_group.empty()
@@ -156,11 +161,19 @@ while True:
             bullet_group.empty()
 
     # 敵の生成
-    if game_state == "play" and pygame.time.get_ticks() >= 1000:
-        enemy = Enemy()
-        all_sprites_group.add(enemy)
-        enemy_group.add(enemy)
-        pygame.time.set_timer(pygame.USEREVENT, 1000)
+    now = pygame.time.get_ticks()
+    if game_state == "play" and now:
+        if now % 40 == 0:
+            if n > 1:
+                n -= 1
+        last_countdown_tick = now
+
+        spawn_countdown -= 1
+        if spawn_countdown <= 0:
+            spawn_countdown = n
+            enemy = Enemy()
+            all_sprites_group.add(enemy)
+            enemy_group.add(enemy)
 
     # 画面の更新
     pygame.display.update()
